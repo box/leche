@@ -1,0 +1,42 @@
+{
+  "name": "leche",
+  "author": "nzakas",
+  "version": "1.0.1",
+  "description": "A JavaScript testing utility designed to work with Mocha and Sinon",
+  "main": "./lib/leche.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/box/leche"
+  },
+  "keywords": [
+    "testing",
+    "mocha",
+    "sinon"
+  ],
+  "license": "Apache 2",
+  "boxnode": "Library",
+  "scripts": {
+    "test": "node Makefile.js",
+    "lint": "node Makefile.js lint",
+    "docs": "node Makefile.js docs",
+    "browserify": "node Makefile.js browserify",
+    "patch": "node Makefile.js patch",
+    "minor": "node Makefile.js minor",
+    "major": "node Makefile.js major"
+  },
+  "dependencies": {
+    "mocha": "^1.21.4"
+  },
+  "devDependencies": {
+    "browserify": "^5.11.2",
+    "chai": "^1.9.1",
+    "eslint": "^0.8.1",
+    "istanbul": "^0.3.2",
+    "jsdoc": "^3.3.0-alpha9",
+    "jsonlint": "^1.6.2",
+    "mockery": "~1.4",
+    "shelljs": "^0.3.0",
+    "sinon": "^1.10.3"
+  }
+
+}
