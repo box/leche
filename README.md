@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/box/leche.png?branch=master)](https://travis-ci.org/box/leche)
+[![Project Status](http://opensource.box.com/badges/maintenance.svg)](http://opensource.box.com/badges)
+
 # Leche
 
 A JavaScript testing utility designed to work with Mocha and Sinon. This is intended for use both by Node.js and in browsers, so any changes must work in both locations.
