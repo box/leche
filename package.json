@@ -24,8 +24,8 @@
     "minor": "node Makefile.js minor",
     "major": "node Makefile.js major"
   },
-  "dependencies": {
-    "mocha": "^1.21.4"
+  "peerDependencies": {
+    "mocha": ">=1.18 <3"
   },
   "devDependencies": {
     "browserify": "^5.11.2",
@@ -34,6 +34,7 @@
     "istanbul": "^0.3.2",
     "jsdoc": "^3.3.0-alpha9",
     "jsonlint": "^1.6.2",
+    "mocha": "^2.1.0",
     "mockery": "~1.4",
     "shelljs": "^0.3.0",
     "sinon": "^1.10.3"
