@@ -30,7 +30,7 @@
   "devDependencies": {
     "browserify": "^5.11.2",
     "chai": "^1.9.1",
-    "eslint": "^0.8.1",
+    "eslint": "^0.11.0",
     "istanbul": "^0.3.2",
     "jsdoc": "^3.3.0-alpha9",
     "jsonlint": "^1.6.2",
