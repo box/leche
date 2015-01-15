@@ -89,6 +89,9 @@ function release(type) {
 
 	// ...and publish
 	exec('git push origin master --tags');
+
+	// also publish to npm (requires authentication)
+	exec('npm publish');
 }
 
 
