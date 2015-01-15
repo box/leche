@@ -66,6 +66,8 @@ Fakes are objects that share a prototype chain and method definitions of another
 * You can use this object with `sinon.mock()` to set expectations that override the default method behavior of throwing an error. This ensures that only methods with expectations explicitly set can be called.
 * The fake will pass any `instanceof` checks that the original object would pass.
 
+Additionally, fakes contain all of the properties of the passed-in object. In ECMAScript 5 environments, accessing these properties without first setting them to a value will result in an errow.
+
 To create a fake, pass in the object you want to fake to `leche.fake()`, such as:
 
 ```js
@@ -84,13 +86,21 @@ Person.prototype.sayHi = function() {
 };
 
 // in a test
-var fakePerson = leche.fake(Person.prototype);
+var fakePerson = leche.fake(new Person('Jeff'));
 
 assert.ok(fakePerson instanceof Person);  // passes
 assert.ok('sayName' in fakePerson);       // passes
+assert.ok('name' in fakePerson);          // passes
 
 // throws an error
 fakePerson.sayName();
+
+// also throws an error
+var name = fakePerson.name;
+
+// won't throw an error because you've assigned a value
+fakePerson.name = 'Jeff';
+var name = fakePerson.name;
 ```
 
 Fakes are useful for creating mocks, where you set an expectation that a certain method will be called. Sinon will redefine the method with the expectation and no error will be thrown. However, trying to call any other method on the fake will result in an error. For example:
@@ -208,8 +218,6 @@ This project uses `make` for its build system, but you should use `npm` for exec
 1. Run `npm install`.
 1. Run `npm test` to ensure everything is working.
 1. Profit.
-
-
 
 ## Support
 
