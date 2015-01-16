@@ -102,17 +102,32 @@ describe('leche', function() {
 			}, /Unexpected call to method "method"\./);
 		});
 
-		it('should create an object whose properties remain unchanged when called on an object with only properties', function() {
+		it('should create an object whose properties throw an error when accessed', function() {
 
 			var template = {
 				name: 'leche'
 			};
 
 			var fake = leche.fake(template);
-			assert.equal(fake.name, 'leche');
+			assert.throws(function() {
+				fake.name; // calls getter
+			}, /Unexpected use of property "name"\./);
+
 		});
 
-		it('should should create an object with a data property when called on an object with only an accessor property', function() {
+		it('should create an object whose properties do not throw an error when set to a value', function() {
+
+			var template = {
+				name: 'leche'
+			};
+
+			var fake = leche.fake(template);
+			fake.name = 'box';
+
+			assert.equal(fake.name, 'box');
+		});
+
+		it('should create an object with a data property when called on an object with only an accessor property', function() {
 
 			var template = {
 				get data() {
@@ -124,6 +139,7 @@ describe('leche', function() {
 			assert.isTrue('data' in fake);
 			assert.isUndefined(fake.data);
 		});
+
 
 	});
 
