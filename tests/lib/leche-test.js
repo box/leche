@@ -3,7 +3,7 @@
  * @author nzakas
  */
 
-/*global describe, it, afterEach*/
+/*global describe, it, afterEach, sinon, leche, chai*/
 
 'use strict';
 
@@ -11,9 +11,9 @@
 // Requirements
 //------------------------------------------------------------------------------
 
-var sinon = require('sinon'),
-	assert = require('chai').assert,
-	leche = require('../../lib/leche');
+var sinon = compatRequire('sinon') || sinon,
+	assert = (compatRequire('chai') || chai).assert,
+	leche = compatRequire('../../lib/leche') || leche;
 
 //------------------------------------------------------------------------------
 // Private
@@ -24,6 +24,20 @@ var TEST_PREFIX = 'with ';
 
 // variables
 var withData = leche.withData;
+
+/**
+ * An abstraction over require() to allow these tests to be run in a browser.
+ * @param {string} name The name of the package to load.
+ * @returns {?Object} The module in Node.js, null in browsers.
+ * @private
+ */
+function compatRequire(name) {
+	if (typeof require === 'function') {
+		return require(name);
+	} else {
+		return null;
+	}
+}
 
 //------------------------------------------------------------------------------
 // Public

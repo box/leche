@@ -2,7 +2,7 @@
  * @fileoverview Build file
  * @author nzakas
  */
-/*global target, exec, echo, find, which, test, mkdir*/
+/*global target, exec, echo, find, which, test, exit, mkdir*/
 
 'use strict';
 
@@ -12,7 +12,8 @@
 
 require('shelljs/make');
 
-var util = require('util');
+var util = require('util'),
+	nodeCLI = require('shelljs-nodecli');
 
 //------------------------------------------------------------------------------
 // Data
@@ -21,6 +22,7 @@ var util = require('util');
 var NODE = 'node ',	// intentional extra space
 	NODE_MODULES = './node_modules/',
 	BUILD_DIR = './build/',
+	DIST_DIR = './dist/',
 	LIB_DIR = './lib/',
 
 	// Utilities - intentional extra space at the end of each string
@@ -43,6 +45,21 @@ var NODE = 'node ',	// intentional extra space
 //------------------------------------------------------------------------------
 // Helpers
 //------------------------------------------------------------------------------
+
+/**
+ * Executes a Node CLI and exits with a non-zero exit code if the
+ * CLI execution returns a non-zero exit code. Otherwise, it does
+ * not exit.
+ * @param {...string} [args] Arguments to pass to the Node CLI utility.
+ * @returns {void}
+ */
+function nodeExec(args) {
+	args = arguments; // make linting happy
+	var code = nodeCLI.exec.apply(nodeCLI, args).code;
+	if (code !== 0) {
+		exit(code);
+	}
+}
 
 /**
  * Generates a function that matches files with a particular extension.
@@ -81,11 +98,13 @@ function getSourceDirectories() {
  */
 function release(type) {
 	target.test();
-	exec('npm version ' + type);
 
-	// npm version changes indentation to spaces, this changes it to tabs
-	exec('git add package.json');
-	exec('git commit --amend --no-edit');
+	// regenerate dist files
+	target.generateDist();
+	exec('git add ' + DIST_DIR);
+	exec('git commit --amend --no-edit"');
+
+	exec('npm version ' + type);
 
 	// ...and publish
 	exec('git push origin master --tags');
@@ -116,7 +135,13 @@ target.lint = function() {
 
 target.test = function() {
 	target.lint();
-	exec(ISTANBUL + ' cover ' + MOCHA + TEST_FILES);
+
+	echo('Running Node.js tests');
+	exec(ISTANBUL + ' cover ' + MOCHA + ' -- -R dot ' + TEST_FILES);
+
+	echo('Running browser tests');
+	target.browserify();
+	nodeExec("mocha-phantomjs", "-R dot", "tests/tests.htm");
 };
 
 target.docs = function() {
@@ -125,17 +150,44 @@ target.docs = function() {
 	echo('Documentation has been output to /jsdoc');
 };
 
+target.generateDist = function() {
+	var pkg = require('./package.json'),
+		distFilename = DIST_DIR + pkg.name + '.js',
+		minDistFilename = distFilename.replace(/\.js$/, '.min.js');
+
+	if (!test('-d', DIST_DIR)) {
+		mkdir(DIST_DIR);
+	}
+
+	exec(util.format('%s %s.js -o %s -s %s -i mocha', BROWSERIFY, LIB_DIR + pkg.name,
+			distFilename, pkg.name));
+
+
+	nodeExec('uglifyjs', distFilename, '-o', minDistFilename);
+
+	// Add copyrights
+	cat('./config/copyright.txt', distFilename).to(distFilename);
+	cat('./config/copyright.txt', minDistFilename).to(minDistFilename);
+
+	// ensure there's a newline at the end of each file
+	(cat(distFilename) + '\n').to(distFilename);
+	(cat(minDistFilename) + '\n').to(minDistFilename);
+};
+
 target.browserify = function() {
-	var pkg = require('./package.json');
+	var pkg = require('./package.json'),
+		buildFilename = BUILD_DIR + pkg.name + '.js',
+		minDistFilename = buildFilename.replace(/\.js$/, '.min.js');
 
 	if (!test('-d', BUILD_DIR)) {
 		mkdir(BUILD_DIR);
 	}
 
-	exec(util.format('%s %s.js -o %s-%s.js -s %s -i mocha', BROWSERIFY, LIB_DIR + pkg.name,
-			BUILD_DIR + pkg.name, pkg.version, pkg.name));
+	exec(util.format('%s %s.js -o %s -s %s -i mocha', BROWSERIFY, LIB_DIR + pkg.name,
+			buildFilename, pkg.name));
 
-	// exec(BROWSERIFY + ' ' + LIB_DIR + pkg.name + '.js -o ' + BUILD_DIR + pkg.name + '-' + pkg.version + '.js -s ' + pkg.name);
+	// Add copyrights
+	cat('./config/copyright.txt', buildFilename).to(buildFilename);
 };
 
 target.patch = function() {

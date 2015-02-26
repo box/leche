@@ -1,8 +1,5 @@
-build/
-coverage/
-npm-debug.log
-jsdoc/
-dist/
-
-node_modules/
-
+/build/
+/coverage/
+/npm-debug.log
+/jsdoc/
+/node_modules/

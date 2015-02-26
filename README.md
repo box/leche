@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/box/leche.png?branch=master)](https://travis-ci.org/box/leche)
-[![Project Status](http://opensource.box.com/badges/maintenance.svg)](http://opensource.box.com/badges)
+[![Project Status](http://opensource.box.com/badges/stable.svg)](http://opensource.box.com/badges)
 
 # Leche
 
@@ -28,17 +28,33 @@ The `leche` object is a singleton, so there is no need to initialize it.
 
 ### Including in a Web Page
 
-To include Leche in a web page, you first need to build the browser version. Checkout Leche from GitHub and run:
+To include Leche in a web page, you can use [RawGit](http://rawgit.com).
+
+The last published release:
 
 ```
-npm run browserify
+<script src="https://cdn.rawgit.com/box/leche/master/dist/leche.js"></script>
 ```
 
-This will create a file that can be used in a web page and output it into `/build`. Include the file in your page:
+Minified:
 
-```html
-<script src="leche-01.1.js"></script>
 ```
+<script src="https://cdn.rawgit.com/box/leche/master/dist/leche.min.js"></script>
+```
+
+A specific version (in this example v2.1.0):
+
+```
+<script src="https://cdn.rawgit.com/box/leche/v2.1.0/dist/leche.js"></script>
+```
+
+Minified:
+
+```
+<script src="https://cdn.rawgit.com/box/leche/v2.1.0/dist/leche.min.js"></script>
+```
+
+**Note:** We highly recommend using a specific version as the master branch may change without notice.
 
 A global `leche` object is created and is the same as the Node.js version.
 
