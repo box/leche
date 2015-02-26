@@ -35,8 +35,12 @@
     "jsdoc": "^3.3.0-alpha9",
     "jsonlint": "^1.6.2",
     "mocha": "^2.1.0",
+    "mocha-phantomjs": "^3.5.3",
     "mockery": "~1.4",
+    "phantomjs": "^1.9.15",
     "shelljs": "^0.3.0",
-    "sinon": "^1.10.3"
+    "shelljs-nodecli": "^0.1.1",
+    "sinon": "^1.12.2",
+    "uglify-js": "^2.4.16"
   }
 }
