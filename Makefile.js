@@ -52,10 +52,24 @@ var NODE = 'node ',	// intentional extra space
  * not exit.
  * @param {...string} [args] Arguments to pass to the Node CLI utility.
  * @returns {void}
+ * @private
  */
 function nodeExec(args) {
 	args = arguments; // make linting happy
 	var code = nodeCLI.exec.apply(nodeCLI, args).code;
+	if (code !== 0) {
+		exit(code);
+	}
+}
+
+/**
+ * Runs exec() but exits if the exit code is non-zero.
+ * @param {string} cmd The command to execute.
+ * @returns {void}
+ * @private
+ */
+function execOrExit(cmd) {
+	var code = exec(cmd).code;
 	if (code !== 0) {
 		exit(code);
 	}
@@ -99,18 +113,18 @@ function getSourceDirectories() {
 function release(type) {
 	target.test();
 
-	// regenerate dist files
 	target.generateDist();
-	exec('git add ' + DIST_DIR);
-	exec('git commit --amend --no-edit"');
 
-	exec('npm version ' + type);
+	execOrExit('git add -A');
+	execOrExit('git commit --amend --no-edit');
+
+	execOrExit('npm version ' + type);
 
 	// ...and publish
-	exec('git push origin master --tags');
+	execOrExit('git push origin master --tags');
 
 	// also publish to npm (requires authentication)
-	exec('npm publish');
+	execOrExit('npm publish');
 }
 
 
@@ -185,9 +199,6 @@ target.browserify = function() {
 
 	exec(util.format('%s %s.js -o %s -s %s -i mocha', BROWSERIFY, LIB_DIR + pkg.name,
 			buildFilename, pkg.name));
-
-	// Add copyrights
-	cat('./config/copyright.txt', buildFilename).to(buildFilename);
 };
 
 target.patch = function() {
