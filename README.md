@@ -222,11 +222,6 @@ This project uses `make` for its build system, but you should use `npm` for exec
 * `npm test` - runs linting and unit tests (plus code coverage)
 * `npm run lint` - runs just linting
 * `npm run jsdoc` - creates JSDoc documentation
-* `npm run deps` - updates remote dependencies
-* `npm run browserify` - creates a version that will run in browsers
-* `npm run patch` - create a patch version update and push to GitHub Enterprise
-* `npm run minor` - create a minor version update and push to GitHub Enterprise
-* `npm run major` - create a major version update and push to GitHub Enterprise
 
 ## Developing Leche
 
@@ -241,7 +236,7 @@ Need to contact us directly? Email oss@box.com and be sure to include the name o
 
 ## Copyright and License
 
-Copyright 2014 Box, Inc. All rights reserved.
+Copyright 2014-2015 Box, Inc. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
