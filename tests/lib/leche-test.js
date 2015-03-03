@@ -141,6 +141,39 @@ describe('leche', function() {
 			assert.equal(fake.name, 'box');
 		});
 
+		it('should not throw an error when overwriting a property twice', function() {
+
+			var template = {
+				name: 'leche'
+			};
+
+			var fake = leche.fake(template);
+			fake.name = 'box';
+			fake.name = 'foo';
+		});
+
+		it('should now throw an error when there is a prototype property', function() {
+
+			// Node.js v0.10.32 issue
+			// see: https://github.com/box/leche/issues/14
+
+			function MyType() {
+				this.property = true;
+			}
+
+			MyType.prototype.x = true;
+
+			var template = new MyType();
+			var fake = leche.fake(template);
+			var desc = Object.getOwnPropertyDescriptor(fake, 'property');
+			assert.isDefined(desc.get);
+
+			fake.property = leche.fake(template.property);
+
+			// shouldn't throw error
+			fake.property;
+		});
+
 		it('should create an object with a data property when called on an object with only an accessor property', function() {
 
 			var template = {
