@@ -25,7 +25,7 @@
     "major": "node Makefile.js major"
   },
   "peerDependencies": {
-    "mocha": ">=1.18 <3"
+    "mocha": ">=1.18 <4"
   },
   "devDependencies": {
     "browserify": "^5.11.2",
@@ -34,13 +34,12 @@
     "istanbul": "^0.3.2",
     "jsdoc": "^3.3.0-alpha9",
     "jsonlint": "^1.6.2",
-    "mocha": "^2.1.0",
-    "mocha-phantomjs": "^3.5.3",
+    "mocha": "^3.0.2",
+    "mocha-phantomjs": "^4.1.0",
     "mockery": "~1.4",
-    "phantomjs": "^1.9.15",
     "shelljs": "^0.3.0",
     "shelljs-nodecli": "^0.1.1",
-    "sinon": "^1.12.2",
+    "sinon": "1.17.5",
     "uglify-js": "^2.4.16"
   }
 }
