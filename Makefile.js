@@ -113,12 +113,12 @@ function getSourceDirectories() {
 function release(type) {
 	target.test();
 
+	execOrExit('npm version ' + type);
+
 	target.generateDist();
 
 	execOrExit('git add -A');
 	execOrExit('git commit --amend --no-edit');
-
-	execOrExit('npm version ' + type);
 
 	// ...and publish
 	execOrExit('git push origin master --tags');
