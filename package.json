@@ -31,7 +31,7 @@
     "browserify": "^5.11.2",
     "chai": "^1.9.1",
     "eslint": "^0.11.0",
-    "istanbul": "^0.3.2",
+    "istanbul": "^0.4.5",
     "jsdoc": "^3.3.0-alpha9",
     "jsonlint": "^1.6.2",
     "mocha": "^3.0.2",
