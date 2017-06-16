@@ -240,6 +240,21 @@ describe('leche', function() {
 			assert.ok(secondCall.calledWith(3, 4));
 		});
 
+		it ('should call the passed-in function multiple times with an array of objects', function() {
+			var spy = sandbox.spy();
+
+			withData([
+				[ {a: 1}, {b: 2} ],
+				[ {c: 3}, {d: 4} ]
+			], spy);
+
+			var firstCall = spy.getCall(0),
+				secondCall = spy.getCall(1);
+
+			assert.ok(spy.calledTwice);
+			assert.ok(firstCall.calledWith({a: 1}, {b: 2}));
+			assert.ok(secondCall.calledWith({c: 3}, {d: 4}));
+		});
 
 		it ('should call the passed-in function multiple times with an array dataset and non-array values', function() {
 			var spy = sandbox.spy();
@@ -255,6 +270,22 @@ describe('leche', function() {
 			assert.ok(spy.calledTwice);
 			assert.ok(firstCall.calledWith(1));
 			assert.ok(secondCall.calledWith(2));
+		});
+
+		it ('should call the passed-in function multiple times with an array dataset of plain object values', function() {
+			var spy = sandbox.spy();
+
+			withData([
+				{a: 1},
+				{b: 2}
+			], spy);
+
+			var firstCall = spy.getCall(0),
+				secondCall = spy.getCall(1);
+
+			assert.ok(spy.calledTwice);
+			assert.ok(firstCall.calledWith({a: 1}));
+			assert.ok(secondCall.calledWith({b: 2}));
 		});
 
 		it ('should throw an error when the first argument is null', function() {
@@ -302,6 +333,21 @@ describe('leche', function() {
 
 		});
 
+		describe('implicit test names with arrays of objects', function() {
+
+			withData([
+				[ {a: 1}, {b: 2} ],
+				[ {c: 3}, {d: 4} ]
+			], function(first, second) {
+				it('should report the test name', function() {
+
+					// checks the previous describe()'s title
+					assert.equal(this.test.parent.title, TEST_PREFIX + [JSON.stringify(first), JSON.stringify(second)]);
+				});
+			});
+
+		});
+
 		describe('implicit test names with primitives', function() {
 
 			withData([
@@ -312,6 +358,38 @@ describe('leche', function() {
 
 					// checks the previous describe()'s title
 					assert.equal(this.test.parent.title, TEST_PREFIX + expected);
+				});
+			});
+
+		});
+
+		describe('implicit test names with plain objects', function() {
+
+			withData([
+				{a: 1}
+			], function(object) {
+				it('should report the test name', function() {
+
+					// checks the previous describe()'s title
+					assert.equal(this.test.parent.title, TEST_PREFIX + JSON.stringify(object));
+				});
+			});
+
+		});
+
+		describe('implicit test names with class instances', function() {
+
+			function TestClass() {
+				this.a = 1;
+			}
+
+			withData([
+				new TestClass()
+			], function(object) {
+				it('should report the test name', function() {
+
+					// checks the previous describe()'s title
+					assert.equal(this.test.parent.title, TEST_PREFIX + JSON.stringify(object));
 				});
 			});
 
