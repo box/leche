@@ -2,7 +2,10 @@
  * @fileoverview Build file
  * @author nzakas
  */
-/*global target, exec, echo, find, which, test, exit, mkdir*/
+
+/* eslint comma-dangle: ["error", {"arrays": "only-multiline","objects": "only-multiline","functions": "never"}] */
+
+/* global target, cat, exec, echo, find, which, test, exit, mkdir */
 
 'use strict';
 
@@ -12,35 +15,31 @@
 
 require('shelljs/make');
 
-var util = require('util'),
-	nodeCLI = require('shelljs-nodecli');
+var util = require('util');
+var nodeCLI = require('shelljs-nodecli');
 
 //------------------------------------------------------------------------------
 // Data
 //------------------------------------------------------------------------------
 
-var NODE = 'node ',	// intentional extra space
-	NODE_MODULES = './node_modules/',
-	BUILD_DIR = './build/',
-	DIST_DIR = './dist/',
-	LIB_DIR = './lib/',
-
-	// Utilities - intentional extra space at the end of each string
-	JSON_LINT = NODE + NODE_MODULES + 'jsonlint/lib/cli.js ',
-	ISTANBUL = NODE + NODE_MODULES + 'istanbul/lib/cli.js ',
-	MOCHA = NODE_MODULES + 'mocha/bin/_mocha ',
-	JSDOC = NODE + NODE_MODULES + 'jsdoc/jsdoc.js ',
-	ESLINT = NODE + NODE_MODULES + 'eslint/bin/eslint ',
-	BROWSERIFY = NODE + NODE_MODULES + 'browserify/bin/cmd.js',
-
-	// Directories
-	JS_DIRS = getSourceDirectories(),
-
-	// Files
-	JS_FILES = find(JS_DIRS).filter(fileType('js')).join(' '),
-	JSON_FILES = find('config/').filter(fileType('json')).join(' ') + ' .eslintrc',
-	TEST_FILES = find('tests/').filter(fileType('js')).join(' '),
-	JSON_SCHEMA = './config/package.schema.json';
+var NODE = 'node ', // intentional extra space
+    NODE_MODULES = './node_modules/',
+    BUILD_DIR = './build/',
+    DIST_DIR = './dist/',
+    LIB_DIR = './lib/',
+    // Utilities - intentional extra space at the end of each string
+    JSON_LINT = NODE + NODE_MODULES + 'jsonlint/lib/cli.js ',
+    JSDOC = NODE + NODE_MODULES + 'jsdoc/jsdoc.js ',
+    ESLINT = NODE + NODE_MODULES + 'eslint/bin/eslint ',
+    BROWSERIFY = NODE + NODE_MODULES + 'browserify/bin/cmd.js',
+    // Directories
+    JS_DIRS = getSourceDirectories(),
+    // Files
+    JS_FILES = find(JS_DIRS).filter(fileType('js')).join(' '),
+    JSON_FILES =
+        find('config/').filter(fileType('json')).join(' ') + ' .eslintrc',
+    TEST_FILES = find('tests/').filter(fileType('js')).join(' '),
+    JSON_SCHEMA = './config/package.schema.json';
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -55,11 +54,11 @@ var NODE = 'node ',	// intentional extra space
  * @private
  */
 function nodeExec(args) {
-	args = arguments; // make linting happy
-	var code = nodeCLI.exec.apply(nodeCLI, args).code;
-	if (code !== 0) {
-		exit(code);
-	}
+    args = arguments; // make linting happy
+    var code = nodeCLI.exec.apply(nodeCLI, args).code;
+    if (code !== 0) {
+        exit(code);
+    }
 }
 
 /**
@@ -69,10 +68,10 @@ function nodeExec(args) {
  * @private
  */
 function execOrExit(cmd) {
-	var code = exec(cmd).code;
-	if (code !== 0) {
-		exit(code);
-	}
+    var code = exec(cmd).code;
+    if (code !== 0) {
+        exit(code);
+    }
 }
 
 /**
@@ -82,9 +81,9 @@ function execOrExit(cmd) {
  * @private
  */
 function fileType(extension) {
-	return function(filename) {
-		return filename.substring(filename.lastIndexOf('.') + 1) === extension;
-	};
+    return function(filename) {
+        return filename.substring(filename.lastIndexOf('.') + 1) === extension;
+    };
 }
 
 /**
@@ -93,16 +92,15 @@ function fileType(extension) {
  * @private
  */
 function getSourceDirectories() {
-	var dirs = [ 'lib', 'src', 'app' ],
-		result = [];
+    var dirs = ['lib', 'src', 'app'], result = [];
 
-	dirs.forEach(function(dir) {
-		if (test('-d', dir)) {
-			result.push(dir);
-		}
-	});
+    dirs.forEach(function(dir) {
+        if (test('-d', dir)) {
+            result.push(dir);
+        }
+    });
 
-	return result;
+    return result;
 }
 
 /**
@@ -111,104 +109,112 @@ function getSourceDirectories() {
  * @returns {void}
  */
 function release(type) {
-	target.test();
+    target.test();
 
-	execOrExit('npm version ' + type);
+    execOrExit('npm version ' + type);
 
-	target.generateDist();
+    target.generateDist();
 
-	execOrExit('git add -A');
-	execOrExit('git commit --amend --no-edit');
+    execOrExit('git add -A');
+    execOrExit('git commit --amend --no-edit');
 
-	// ...and publish
-	execOrExit('git push origin master --tags');
+    // ...and publish
+    execOrExit('git push origin master --tags');
 
-	// also publish to npm (requires authentication)
-	execOrExit('npm publish');
+    // also publish to npm (requires authentication)
+    execOrExit('npm publish');
 }
-
 
 //------------------------------------------------------------------------------
 // Tasks
 //------------------------------------------------------------------------------
 
 target.all = function() {
-	target.test();
+    target.test();
 };
 
 target.lint = function() {
-	echo('Validating JSON Files');
-	exec(JSON_LINT + '-q -c ' + JSON_FILES);
+    echo('Validating JSON Files');
+    exec(JSON_LINT + '-q -c ' + JSON_FILES);
 
-	echo('Validating package.json');
-	exec(JSON_LINT + 'package.json -q -V ' + JSON_SCHEMA);
+    echo('Validating package.json');
+    exec(JSON_LINT + 'package.json -q -V ' + JSON_SCHEMA);
 
-	echo('Validating JavaScript files');
-	exec(ESLINT + ' ' + JS_FILES);
+    echo('Validating JavaScript files');
+    exec(ESLINT + ' ' + JS_FILES);
 };
 
 target.test = function() {
-	target.lint();
+    target.lint();
 
-	echo('Running Node.js tests');
-	exec(ISTANBUL + ' cover ' + MOCHA + ' -- -R dot ' + TEST_FILES);
-
-	echo('Running browser tests');
-	target.browserify();
-	nodeExec("mocha-phantomjs", "-R dot", "tests/tests.htm");
+    echo('Running tests');
+    execOrExit('./node_modules/karma/bin/karma start');
 };
 
 target.docs = function() {
-	echo('Generating documentation');
-	exec(JSDOC + '-d jsdoc ' + JS_DIRS.join(' '));
-	echo('Documentation has been output to /jsdoc');
+    echo('Generating documentation');
+    exec(JSDOC + '-d jsdoc ' + JS_DIRS.join(' '));
+    echo('Documentation has been output to /jsdoc');
 };
 
 target.generateDist = function() {
-	var pkg = require('./package.json'),
-		distFilename = DIST_DIR + pkg.name + '.js',
-		minDistFilename = distFilename.replace(/\.js$/, '.min.js');
+    var pkg = require('./package.json'),
+        distFilename = DIST_DIR + pkg.name + '.js',
+        minDistFilename = distFilename.replace(/\.js$/, '.min.js');
 
-	if (!test('-d', DIST_DIR)) {
-		mkdir(DIST_DIR);
-	}
+    if (!test('-d', DIST_DIR)) {
+        mkdir(DIST_DIR);
+    }
 
-	exec(util.format('%s %s.js -o %s -s %s -i mocha', BROWSERIFY, LIB_DIR + pkg.name,
-			distFilename, pkg.name));
+    exec(
+        util.format(
+            '%s %s.js -o %s -s %s -i mocha',
+            BROWSERIFY,
+            LIB_DIR + pkg.name,
+            distFilename,
+            pkg.name
+        )
+    );
 
+    nodeExec('uglifyjs', distFilename, '-o', minDistFilename);
 
-	nodeExec('uglifyjs', distFilename, '-o', minDistFilename);
+    // Add copyrights
+    cat('./config/copyright.txt', distFilename).to(distFilename);
+    cat('./config/copyright.txt', minDistFilename).to(minDistFilename);
 
-	// Add copyrights
-	cat('./config/copyright.txt', distFilename).to(distFilename);
-	cat('./config/copyright.txt', minDistFilename).to(minDistFilename);
-
-	// ensure there's a newline at the end of each file
-	(cat(distFilename) + '\n').to(distFilename);
-	(cat(minDistFilename) + '\n').to(minDistFilename);
+    // ensure there's a newline at the end of each file
+    (cat(distFilename) + '\n').to(distFilename);
+    (cat(minDistFilename) + '\n').to(minDistFilename);
 };
 
 target.browserify = function() {
-	var pkg = require('./package.json'),
-		buildFilename = BUILD_DIR + pkg.name + '.js',
-		minDistFilename = buildFilename.replace(/\.js$/, '.min.js');
+    var pkg = require('./package.json'),
+        buildFilename = BUILD_DIR + pkg.name + '.js',
+        minDistFilename = buildFilename.replace(/\.js$/, '.min.js');
 
-	if (!test('-d', BUILD_DIR)) {
-		mkdir(BUILD_DIR);
-	}
+    if (!test('-d', BUILD_DIR)) {
+        mkdir(BUILD_DIR);
+    }
 
-	exec(util.format('%s %s.js -o %s -s %s -i mocha', BROWSERIFY, LIB_DIR + pkg.name,
-			buildFilename, pkg.name));
+    exec(
+        util.format(
+            '%s %s.js -o %s -s %s -i mocha',
+            BROWSERIFY,
+            LIB_DIR + pkg.name,
+            buildFilename,
+            pkg.name
+        )
+    );
 };
 
 target.patch = function() {
-	release('patch');
+    release('patch');
 };
 
 target.minor = function() {
-	release('minor');
+    release('minor');
 };
 
 target.major = function() {
-	release('major');
+    release('major');
 };
