@@ -10,6 +10,7 @@ module.exports = function(config) {
         browsers: ['PhantomJS'],
 
         browserify: {
+            transform: ['browserify-istanbul'],
             debug: true
         },
 
@@ -23,7 +24,7 @@ module.exports = function(config) {
             check: {
                 global: {
                     statements: 95,
-                    branches: 95,
+                    branches: 94,
                     functions: 95,
                     lines: 95
                 }
@@ -43,7 +44,7 @@ module.exports = function(config) {
         },
 
         preprocessors: {
-            'lib/leche.js': ['browserify', 'coverage'],
+            'lib/leche.js': ['browserify'],
             'tests/lib/leche-test.js': ['browserify']
         },
 

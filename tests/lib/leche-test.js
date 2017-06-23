@@ -3,7 +3,7 @@
  * @author nzakas
  */
 
-/*global describe, it, afterEach, sinon, leche, chai*/
+/* global describe, it, afterEach, sinon, assert */
 
 'use strict';
 
@@ -41,8 +41,8 @@ describe('leche', function() {
 
 			var object = leche.create(['method1', 'method2']);
 
-			assert.ok(object.hasOwnProperty('method1'));
-			assert.ok(object.hasOwnProperty('method2'));
+			assert.isTrue(object.hasOwnProperty('method1'));
+			assert.isTrue(object.hasOwnProperty('method2'));
 			assert.equal(typeof object.method1, 'function');
 			assert.equal(typeof object.method2, 'function');
 		});
@@ -69,7 +69,7 @@ describe('leche', function() {
 			var template = {};
 			var fake = leche.fake(template);
 
-			assert.ok(template.isPrototypeOf(fake));
+			assert.isTrue(template.isPrototypeOf(fake));
 		});
 
 		it('should create an object whose methods throw an error when called on an object with own methods only', function() {
@@ -108,7 +108,8 @@ describe('leche', function() {
 
 			var fake = leche.fake(template);
 			assert.throws(function() {
-				fake.name; // calls getter
+				// calls getter
+				fake.name; // eslint-disable-line no-unused-expressions
 			}, /Unexpected use of property "name"\./);
 
 		});
@@ -155,7 +156,7 @@ describe('leche', function() {
 			fake.property = leche.fake(template.property);
 
 			// shouldn't throw error
-			fake.property;
+			fake.property; // eslint-disable-line no-unused-expressions
 		});
 
 		it('should create an object with a data property when called on an object with only an accessor property', function() {
@@ -176,7 +177,7 @@ describe('leche', function() {
 
 	describe('withData()', function(){
 
-		it ('should call the passed-in function multiple times with an object dataset', function() {
+		it('should call the passed-in function multiple times with an object dataset', function() {
 			var spy = sandbox.spy();
 
 			withData({
@@ -187,12 +188,12 @@ describe('leche', function() {
 			var firstCall = spy.getCall(0),
 				secondCall = spy.getCall(1);
 
-			assert.ok(spy.calledTwice);
-			assert.ok(firstCall.calledWith(1, 2));
-			assert.ok(secondCall.calledWith(3, 4));
+			assert.isTrue(spy.calledTwice);
+			assert.isTrue(firstCall.calledWith(1, 2));
+			assert.isTrue(secondCall.calledWith(3, 4));
 		});
 
-		it ('should call the passed-in function multiple times with an object dataset and non-array values', function() {
+		it('should call the passed-in function multiple times with an object dataset and non-array values', function() {
 			var spy = sandbox.spy();
 
 			withData({
@@ -203,12 +204,12 @@ describe('leche', function() {
 			var firstCall = spy.getCall(0),
 				secondCall = spy.getCall(1);
 
-			assert.ok(spy.calledTwice);
-			assert.ok(firstCall.calledWith(1));
-			assert.ok(secondCall.calledWith(2));
+			assert.isTrue(spy.calledTwice);
+			assert.isTrue(firstCall.calledWith(1));
+			assert.isTrue(secondCall.calledWith(2));
 		});
 
-		it ('should call the passed-in function multiple times with an array dataset', function() {
+		it('should call the passed-in function multiple times with an array dataset', function() {
 			var spy = sandbox.spy();
 
 			withData([
@@ -219,12 +220,12 @@ describe('leche', function() {
 			var firstCall = spy.getCall(0),
 				secondCall = spy.getCall(1);
 
-			assert.ok(spy.calledTwice);
-			assert.ok(firstCall.calledWith(1, 2));
-			assert.ok(secondCall.calledWith(3, 4));
+			assert.isTrue(spy.calledTwice);
+			assert.isTrue(firstCall.calledWith(1, 2));
+			assert.isTrue(secondCall.calledWith(3, 4));
 		});
 
-		it ('should call the passed-in function multiple times with an array of objects', function() {
+		it('should call the passed-in function multiple times with an array of objects', function() {
 			var spy = sandbox.spy();
 
 			withData([
@@ -235,12 +236,12 @@ describe('leche', function() {
 			var firstCall = spy.getCall(0),
 				secondCall = spy.getCall(1);
 
-			assert.ok(spy.calledTwice);
-			assert.ok(firstCall.calledWith({a: 1}, {b: 2}));
-			assert.ok(secondCall.calledWith({c: 3}, {d: 4}));
+			assert.isTrue(spy.calledTwice);
+			assert.isTrue(firstCall.calledWith({a: 1}, {b: 2}));
+			assert.isTrue(secondCall.calledWith({c: 3}, {d: 4}));
 		});
 
-		it ('should call the passed-in function multiple times with an array dataset and non-array values', function() {
+		it('should call the passed-in function multiple times with an array dataset and non-array values', function() {
 			var spy = sandbox.spy();
 
 			withData([
@@ -251,12 +252,12 @@ describe('leche', function() {
 			var firstCall = spy.getCall(0),
 				secondCall = spy.getCall(1);
 
-			assert.ok(spy.calledTwice);
-			assert.ok(firstCall.calledWith(1));
-			assert.ok(secondCall.calledWith(2));
+			assert.isTrue(spy.calledTwice);
+			assert.isTrue(firstCall.calledWith(1));
+			assert.isTrue(secondCall.calledWith(2));
 		});
 
-		it ('should call the passed-in function multiple times with an array dataset of plain object values', function() {
+		it('should call the passed-in function multiple times with an array dataset of plain object values', function() {
 			var spy = sandbox.spy();
 
 			withData([
@@ -267,19 +268,19 @@ describe('leche', function() {
 			var firstCall = spy.getCall(0),
 				secondCall = spy.getCall(1);
 
-			assert.ok(spy.calledTwice);
-			assert.ok(firstCall.calledWith({a: 1}));
-			assert.ok(secondCall.calledWith({b: 2}));
+			assert.isTrue(spy.calledTwice);
+			assert.isTrue(firstCall.calledWith({a: 1}));
+			assert.isTrue(secondCall.calledWith({b: 2}));
 		});
 
-		it ('should throw an error when the first argument is null', function() {
+		it('should throw an error when the first argument is null', function() {
 
 			assert.throws(function() {
 				withData(null, function() {});
 			}, /First argument must be/);
 		});
 
-		it ('should throw an error when the first argument is an empty array', function() {
+		it('should throw an error when the first argument is an empty array', function() {
 
 			assert.throws(function() {
 				withData([], function() {});
