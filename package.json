@@ -1,7 +1,7 @@
 {
   "name": "leche",
   "author": "nzakas",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "A JavaScript testing utility designed to work with Mocha and Sinon",
   "main": "./lib/leche.js",
   "repository": {

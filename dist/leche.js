@@ -138,6 +138,12 @@ function truncatedJSONStringify(object, maxLen) {
  * @private
  */
 function stringifyObject(object, maxDepth) {
+	if (typeof object === 'undefined') {
+		return 'undefined';
+	} else if (object === null) {
+		return 'null';
+	}
+
 	var stringRepresentation = object.toString();
 	if (object instanceof Array && maxDepth > 0) {
 		return object.map(function(item) {
