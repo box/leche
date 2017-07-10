@@ -274,14 +274,12 @@ describe('leche', function() {
 		});
 
 		it('should throw an error when the first argument is null', function() {
-
 			assert.throws(function() {
 				withData(null, function() {});
 			}, /First argument must be/);
 		});
 
 		it('should throw an error when the first argument is an empty array', function() {
-
 			assert.throws(function() {
 				withData([], function() {});
 			}, /First argument must be/);
@@ -310,7 +308,6 @@ describe('leche', function() {
 				[ 3, 4 ]
 			], function(first, second) {
 				it('should report the test name', function() {
-
 					// checks the previous describe()'s title
 					assert.equal(this.test.parent.title, TEST_PREFIX + [first, second]);
 				});
@@ -325,9 +322,34 @@ describe('leche', function() {
 				[ {c: 3}, {d: 4} ]
 			], function(first, second) {
 				it('should report the test name', function() {
-
 					// checks the previous describe()'s title
 					assert.equal(this.test.parent.title, TEST_PREFIX + [JSON.stringify(first), JSON.stringify(second)]);
+				});
+			});
+
+		});
+
+		describe('implicit test names with null', function() {
+
+			withData([
+				null,
+			], function(expected) {
+				it('should report the test name', function() {
+					// checks the previous describe()'s title
+					assert.equal(this.test.parent.title, TEST_PREFIX + 'null');
+				});
+			});
+
+		});
+
+		describe('implicit test names with undefined', function() {
+
+			withData([
+				undefined,
+			], function(expected) {
+				it('should report the test name', function() {
+					// checks the previous describe()'s title
+					assert.equal(this.test.parent.title, TEST_PREFIX + 'undefined');
 				});
 			});
 
@@ -340,7 +362,6 @@ describe('leche', function() {
 				123
 			], function(expected) {
 				it('should report the test name', function() {
-
 					// checks the previous describe()'s title
 					assert.equal(this.test.parent.title, TEST_PREFIX + expected);
 				});
@@ -354,7 +375,6 @@ describe('leche', function() {
 				{a: 1}
 			], function(object) {
 				it('should report the test name', function() {
-
 					// checks the previous describe()'s title
 					assert.equal(this.test.parent.title, TEST_PREFIX + JSON.stringify(object));
 				});
