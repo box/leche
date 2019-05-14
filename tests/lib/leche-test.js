@@ -29,7 +29,7 @@ var withData = leche.withData;
 
 describe('leche', function() {
 
-	var sandbox = sinon.sandbox.create();
+	var sandbox = sinon.createSandbox();
 
 	afterEach(function() {
 		sandbox.verifyAndRestore();
