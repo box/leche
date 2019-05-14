@@ -11,6 +11,11 @@ module.exports = function(config) {
 
         browserify: {
             transform: ['browserify-istanbul'],
+            configure: function(bundle) {
+              bundle.on('prebundle', function() {
+                bundle.ignore('mocha');
+              });
+            },
             debug: true
         },
 
