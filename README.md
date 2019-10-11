@@ -82,7 +82,7 @@ Fakes are objects that share a prototype chain and method definitions of another
 * You can use this object with `sinon.mock()` to set expectations that override the default method behavior of throwing an error. This ensures that only methods with expectations explicitly set can be called.
 * The fake will pass any `instanceof` checks that the original object would pass.
 
-Additionally, fakes contain all of the properties of the passed-in object. In ECMAScript 5 environments, accessing these properties without first setting them to a value will result in an errow.
+Additionally, fakes contain all of the properties of the passed-in object. In ECMAScript 5 environments, accessing these properties without first setting them to a value will result in an error.
 
 To create a fake, pass in the object you want to fake to `leche.fake()`, such as:
 
