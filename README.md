@@ -1,5 +1,9 @@
 [![Build Status](https://travis-ci.org/box/leche.png?branch=master)](https://travis-ci.org/box/leche)
-[![Project Status](http://opensource.box.com/badges/stable.svg)](http://opensource.box.com/badges)
+[![Project Status](https://opensource.box.com/badges/deprecated.svg)](https://opensource.box.com/badges)
+
+# DEPRECATED
+
+Box has migrated to using Jest and no longer uses `mocha` or `leche`. We no longer support changes, pull requests, or upgrades to this package.
 
 # Leche
 
